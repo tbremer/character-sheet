@@ -1,3 +1,6 @@
+# Local Ignores
+google-services-key.json
+
 # Logs
 logs
 *.log

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Character Sheet | Home</title>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.7.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.7.0/firebase-auth.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+  </head>
+  <body>
+    <div id="app">Loading…</div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const tmp = firebase;
+        const app = document.getElementById('app');
+
+        delete window.firebase;
+
+        tmp.auth().onAuthStateChanged(function(currentUser) {
+          if (currentUser) {
+            console.log('currentUser:', currentUser);
+            app.textContent = 'Gotcha! ' + currentUser.email;
+          } else {
+            window.location = '/login';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
