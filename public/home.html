@@ -43,7 +43,7 @@
         text-align: right;
       }
 
-      .global-header {
+      .menu-background {
         background: rgb(213, 213, 213);
         background: linear-gradient(
           180deg,
@@ -94,14 +94,14 @@
   <body>
     <div id="app" class="loading"><span class="holder">Loading</span><span class="spinner"></span></div>
     <template id="template-header">
-      <header class="global-header global-header pb-1 px-2 flex justify-between items-center text-xs">
+      <header class="menu-background pb-1 px-2 flex justify-between items-center text-xs">
         <div class="js-menu-contanier">
           <button class="js-menu-trigger font-medium p-2" type="button" id="file">
             <span class="border-solid border-b-2 border-gray-900">F</span>ile
           </button>
           <div class="js-menu" style="display: none;">
             <button type="button" class="js-menu-item">New<span class="text-xl">&blacktriangleright;</span></button>
-            <button type="button" class="js-menu-item">Open</button>
+            <button type="button" class="js-menu-item" id="open-previous">Open</button>
           </div>
         </div>
 
@@ -109,6 +109,14 @@
           <span class="border-solid border-b-2 border-gray-900">S</span>ign Out
         </button>
       </header>
+    </template>
+
+    <template id="template-open">
+      <section style="position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%);">
+        <header class="menu-background pb-1 px-2 flex justify-between items-center text-xs text-center">
+          Open
+        </header>
+      </section>
     </template>
 
     <script>
@@ -166,6 +174,13 @@
 
                   document.addEventListener('click', close);
                 }
+              });
+
+              const openMenu = document.getElementById('open-previous');
+
+              openMenu.addEventListener('click', () => {
+                const template = document.getElementById('template-open');
+                app.appendChild(template.content.cloneNode(true));
               });
             }, 2200);
           } else {
