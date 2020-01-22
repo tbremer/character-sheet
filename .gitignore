@@ -1,6 +1,7 @@
 # Local Ignores
 google-services-key.json
 public/
+.cache
 
 # Logs
 logs
