@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Character Sheet | Home</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+      :root {
+        color: #16161d;
+        font-size: 100%;
+        font-family: 'VT323', 'Courier New', monospace;
+        user-select: none;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #efefef;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .selectable {
+        user-select: contain;
+      }
+      .pointer-event-off {
+        pointer-events: none;
+      }
+
+      #app.loading {
+        height: 66%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #app.loading span {
+        flex: 1;
+      }
+      #app.loading .holder {
+        text-align: right;
+      }
+
+      .menu-background {
+        background: rgb(213, 213, 213);
+        background: linear-gradient(
+          180deg,
+          rgba(213, 213, 213, 1) 90%,
+          rgba(192, 192, 192, 1) 91%,
+          rgba(22, 22, 29, 1) 100%
+        );
+      }
+
+      .window {
+        box-shadow: 0.0625rem 0.0625rem 0 0.09375rem rgba(0, 0, 0, 0.75);
+      }
+
+      .window-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0.5rem;
+      }
+      .window-title__name {
+        flex: 1;
+        text-align: center;
+        height: 14px;
+        line-height: 0.75;
+      }
+      .window-title__controls {
+        display: flex;
+      }
+      .window-title__controls button {
+        position: relative;
+        height: 14px;
+        width: 14px;
+        background-color: #c2c2c2;
+        border: 1px outset black;
+        box-shadow: inset 3px 3px 1px -2px #fff, inset -3px -3px 1px -2px #000;
+      }
+      .window-title__controls button:focus {
+        outline: none;
+      }
+
+      .window-title__controls button:active {
+        box-shadow: inset 3px 3px 1px -2px #000, inset -3px -3px 1px -2px #fff;
+      }
+
+      .window-title__controls--right button::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -60%);
+        content: '';
+        display: inline-block;
+        width: 100%;
+        height: 0.28125rem;
+        background-color: transparent;
+        border: 1px solid #000;
+        border-left-width: 0;
+        border-right-width: 0;
+        box-shadow: inset 0.046875rem 0.046875rem 0.0625rem 0 hsla(0, 0%, 0%, 0.55);
+      }
+
+      .js-menu-contanier {
+        position: relative;
+      }
+
+      .js-menu {
+        position: absolute;
+        top: 100%;
+        width: 300px;
+        background: rgb(213, 213, 213);
+        margin-top: 0.25rem;
+        padding: 0.5rem 0;
+        border-radius: 0.0625rem;
+      }
+
+      .js-menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0.5rem;
+        width: 100%;
+        height: 30px;
+      }
+
+      .js-menu-trigger:focus,
+      .js-menu-item:focus,
+      .btn\:focus:focus {
+        outline: none;
+      }
+
+      .js-menu-trigger.open,
+      .js-menu-item:hover,
+      .btn\:focus:active {
+        background-color: hsla(356, 97%, 67%, 0.88);
+      }
+
+      .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+        clip: rect(1px, 1px, 1px, 1px);
+        white-space: nowrap; /* added line */
+      }
+    </style>
+    <!-- <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,500,700&display=swap" rel="stylesheet" /> -->
+    <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app" class="loading"><span class="holder">Loading</span><span class="spinner"></span></div>
+    <template id="template-header">
+      <header class="menu-background pb-1 px-2 flex justify-between items-center">
+        <div class="js-menu-contanier">
+          <button class="js-menu-trigger font-medium p-2" type="button" id="file">
+            <span class="pointer-events-off border-solid border-b-2 border-gray-900">F</span>ile
+          </button>
+          <div class="js-menu window" style="display: none;">
+            <button type="button" class="js-menu-item">New<span class="text-xl">&blacktriangleright;</span></button>
+            <button type="button" class="js-menu-item" id="open-previous">Open</button>
+          </div>
+        </div>
+
+        <button class="btn:focus font-medium p-2" type="button" id="sign-out">
+          <span class="pointer-events-off border-solid border-b-2 border-gray-900">S</span>ign Out
+        </button>
+      </header>
+    </template>
+
+    <template id="template-open">
+      <section
+        class="window draggable"
+        style="position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%); max-width: 600px; min-width: 280px; width: 66%;"
+      >
+        <header class="menu-background window-title">
+          <div class="window-title__controls window-title__controls--left">
+            <button type="button" class="js-close-window"><span class="visually-hidden">close</span></button>
+          </div>
+          <div class="window-title__name">Open</div>
+          <div class="window-title__controls window-title__controls--right">
+            <button type="button" class="js-max-window"><span class="visually-hidden">maximize window</span></button>
+          </div>
+        </header>
+        <section style="background-color: #fff; padding: .5rem .75rem; height: 250px;">Inside</section>
+      </section>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
