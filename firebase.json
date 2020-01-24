@@ -7,24 +7,12 @@
     "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
   },
   "hosting": {
-    "public": "public",
+    "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "/authenticate",
-        "destination": "/authenticate.html"
-      },
-      {
-        "source": "/~",
-        "destination": "/home.html"
-      },
-      {
-        "source": "/api/hello",
-        "function": "hello"
-      },
-      {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/home.html"
       }
     ]
   }
