@@ -4,8 +4,12 @@
 @tailwind utilities;
 
 :root {
-    font-family: 'VT323', 'Courier New', Courier, monospace;
+    color: #16161d;
     font-size: 100%;
+    font-family: 'VT323', 'Courier New', monospace;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
 }
 
 *,
@@ -39,5 +43,202 @@ html,
 body {
     width: 100%;
     height: 100%;
-    @apply .bg-gray-200;
+    background-color: #efefef;
+    /* @apply .bg-gray-200; */
+}
+
+button {
+    cursor: default;
+}
+
+.selectable {
+    user-select: contain;
+}
+
+.pointer-event-off {
+    pointer-events: none;
+}
+
+.menu-background {
+    background: rgb(213, 213, 213);
+    background: linear-gradient(
+        180deg,
+        rgba(213, 213, 213, 1) 90%,
+        rgba(192, 192, 192, 1) 91%,
+        rgba(22, 22, 29, 1) 100%
+    );
+}
+
+.window {
+    box-shadow: 0.0625rem 0.0625rem 0 0.09375rem rgba(0, 0, 0, 0.75);
+}
+
+.window-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+}
+
+.window-title__name {
+    flex: 1;
+    text-align: center;
+    height: 14px;
+    line-height: 0.75;
+    padding: 0 0.5rem;
+}
+
+.window-title__controls {
+    display: flex;
+}
+
+.window-title__controls button {
+    position: relative;
+    height: 14px;
+    width: 14px;
+    background-color: #c2c2c2;
+    border: 1px outset black;
+    box-shadow: inset 3px 3px 1px -2px #fff, inset -3px -3px 1px -2px #000;
+}
+
+.window-title__controls button:focus {
+    outline: none;
+}
+
+.window-title__controls button:active {
+    box-shadow: inset 3px 3px 1px -2px #000, inset -3px -3px 1px -2px #fff;
+}
+
+.window-title__controls--right button::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 0.28125rem;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-left-width: 0;
+    border-right-width: 0;
+    box-shadow: inset 0.046875rem 0.046875rem 0.0625rem 0 hsla(0, 0%, 0%, 0.55);
+}
+
+.menu-contanier {
+    position: relative;
+}
+
+.menu-contanier button {
+    outline: none;
+}
+
+.menu {
+    position: absolute;
+    top: 100%;
+    width: 300px;
+    background: rgb(213, 213, 213);
+    margin-top: 0.25rem;
+    padding: 0.5rem 0;
+    border-radius: 0.0625rem;
+    z-index: 2;
+}
+
+.menu--submenu {
+    top: -12px;
+    left: 100%;
+    border-left: 1px solid;
+}
+
+.menu--right {
+    left: 100%;
+}
+
+.menu--top {
+    top: 0;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5rem;
+    width: 100%;
+    height: 30px;
+}
+
+.menu-item--disabled {
+    color: rgb(180, 180, 180);
+}
+.menu-item--disabled.menu-item:hover {
+    background-color: rgb(213, 213, 213);
+}
+
+.menu-contanier button:focus,
+.menu-trigger:focus,
+.menu-item:focus,
+.btn\:focus:focus {
+    outline: none;
+}
+
+.menu-trigger.open,
+.menu-item:hover,
+.btn\:focus:active {
+    background-color: hsla(356, 97%, 67%, 0.88);
+}
+
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap; /* added line */
+}
+
+/* Copped from GitHub */
+.btn {
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-repeat: repeat-x;
+    background-position: -1px -1px;
+    background-size: 110% 110%;
+    border: 1px solid rgba(27, 31, 35, 0.2);
+    border-radius: 0.0625em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: #24292e;
+    background-color: #eff3f6;
+    background-image: linear-gradient(-180deg, #efefef, #c2c2c2 90%);
+}
+
+.btn-sm {
+    padding: 3px 12px;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn:focus {
+    outline: none;
+}
+.btn:active {
+    border-color: hsla(356, 97%, 67%, 0.88);
 }

@@ -13,6 +13,7 @@ export function Route({ path, children, exact, fallthrough }) {
   if (path && exact && url === path) return children;
   if (path && !exact & (url.substring(0, path.length) === path)) return children;
   if (fallthrough) return children;
+
   return null;
 }
 

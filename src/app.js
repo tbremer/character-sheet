@@ -2,7 +2,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import AppLoading from './Components/AppLoading';
 import Router, { Route, RouterContext } from './Components/Router';
+import Home from './Components/Home';
 import { auth } from './firebase';
+import { WindowsProvider } from './Context/Windows';
 
 const worker = new Worker('./worker.js');
 
@@ -83,33 +85,7 @@ function App() {
       <Route path="/authenticate" exact={false}>
         <Authenticate />
       </Route>
-      <Route path="/~">
-        <header className="menu-background pb-1 px-2 flex justify-between items-center">
-          <div className="js-menu-contanier">
-            <button className="js-menu-trigger font-medium p-2" type="button" id="file">
-              <span className="pointer-events-off border-solid border-b-2 border-gray-900">F</span>ile
-            </button>
-            <div className="js-menu window" style={{ display: 'none' }}>
-              <button type="button" className="js-menu-item">
-                New<span className="text-xl">&blacktriangleright;</span>
-              </button>
-              <button type="button" className="js-menu-item">
-                Open
-              </button>
-            </div>
-          </div>
-
-          <button
-            className="btn:focus font-medium p-2"
-            type="button"
-            onClick={() => {
-              auth.signOut().then(() => window.history.pushState(null, null, '/login'));
-            }}
-          >
-            <span className="pointer-events-off border-solid border-b-2 border-gray-900">S</span>ign Out
-          </button>
-        </header>
-      </Route>
+      <Route path="/~" children={<Home />} />
 
       {/* <Route fallthrough>Oh no! we 404'd.</Route> */}
     </>
@@ -118,7 +94,9 @@ function App() {
 
 render(
   <Router>
-    <App />
+    <WindowsProvider>
+      <App />
+    </WindowsProvider>
   </Router>,
   app
 );
