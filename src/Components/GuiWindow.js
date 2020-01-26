@@ -2,10 +2,31 @@ import React from 'react';
 
 let curZ = 0;
 
+function Context({ position, closeSelf, children }) {
+  React.useEffect(() => {
+    document.addEventListener('mousedown', closeSelf);
+
+    return () => document.removeEventListener('mousedown', closeSelf);
+  });
+  return (
+    <section
+      className="menu window"
+      style={{
+        top: position.y + 'px',
+        left: position.x + 'px',
+        width: '250px',
+      }}
+    >
+      {children}
+    </section>
+  );
+}
+
 export default function GuiWindow({ closeDialog, children, title, width, height }) {
   const windowRef = React.useRef(null);
   const headerRef = React.useRef(null);
   const [minimized, setMinimized] = React.useState(false);
+  const [contextMenu, setContextMenu] = React.useState(null);
 
   React.useEffect(() => {
     const { current: windowElem } = windowRef;
@@ -57,40 +78,61 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
     else elem.style.top = bounds.y + 11 + 'px';
   }
 
-  return (
-    <section
-      ref={windowRef}
-      className="window draggable flex flex-col"
-      style={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width,
-        height: minimized ? 'auto' : height,
-        zIndex: curZ,
-      }}
-    >
-      <header ref={headerRef} className="menu-background window-title">
-        <div className="window-title__controls window-title__controls--left">
-          <button type="button" onClick={closeDialog}>
-            <span className="visually-hidden">close</span>
-          </button>
-        </div>
-        <div className="window-title__name pointer-event-off">{title}</div>
-        <div className="window-title__controls window-title__controls--right">
-          <button type="button" onClick={minimizeWindow}>
-            <span className="visually-hidden">minimize window</span>
-          </button>
-        </div>
-      </header>
+  function showContextMenu(children) {
+    return false;
+    return evt => {
+      evt.preventDefault();
+      setContextMenu(
+        <Context
+          closeSelf={evt => {
+            evt.stopPropagation();
+            evt.preventDefault();
+            setContextMenu(null);
+          }}
+          children={children}
+          position={{ x: evt.clientX, y: evt.clientY }}
+        />
+      );
+    };
+  }
 
-      {!minimized && (
-        <section className="flex-1 overflow-y-auto" style={{ backgroundColor: '#fff' }}>
-          {children}
-        </section>
-      )}
-    </section>
+  return (
+    <>
+      {contextMenu}
+      <section
+        ref={windowRef}
+        className="window draggable flex flex-col"
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width,
+          height: minimized ? 'auto' : height,
+          zIndex: curZ,
+        }}
+      >
+        <header ref={headerRef} className="menu-background window-title">
+          <div className="window-title__controls window-title__controls--left">
+            <button type="button" onClick={closeDialog}>
+              <span className="visually-hidden">close</span>
+            </button>
+          </div>
+          <div className="window-title__name pointer-event-off">{title}</div>
+          <div className="window-title__controls window-title__controls--right">
+            <button type="button" onClick={minimizeWindow}>
+              <span className="visually-hidden">minimize window</span>
+            </button>
+          </div>
+        </header>
+
+        {!minimized && (
+          <section className="flex-1 overflow-y-auto" style={{ backgroundColor: '#fff' }}>
+            {React.createElement(children, { windowRef: windowRef, showContextMenu })}
+          </section>
+        )}
+      </section>
+    </>
   );
 }
 GuiWindow.defaultProps = { height: '320px', width: '250px' };

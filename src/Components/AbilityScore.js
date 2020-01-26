@@ -13,25 +13,20 @@ export default function NewAbilityScore() {
     evt.preventDefault();
     // const url = `https://api.open5e.com/spells/?search=${searching}`;
 
-    console.log(evt.target.elements);
-
     const item = {
       name,
       score,
       modifier,
     };
 
+    console.log('item:', item);
+
     addAbilityScore(item);
-    addWindow({ width: '100px', height: '100px', child: <AbilityScore key={item.name} item={item} /> });
+    addWindow({ width: '150px', height: 'auto', children: <AbilityScore item={item} /> });
 
     setName('');
     setScore('');
     setModifier('');
-
-    // fetch(url)
-    //   .then(r => r.json())
-    //   .then(setResults)
-    //   .then(console.log, console.error);
   }
 
   return (
@@ -79,12 +74,12 @@ export default function NewAbilityScore() {
 }
 
 export function AbilityScore({ item }) {
-  const { addSpell } = React.useContext(PlayerContext);
+  console.log('AbilityScore:', ...arguments);
   return (
-    <section className="p-2">
-      <header className="text-2xl">{item.name}:</header>
-      <div className="text-xl">Score: {item.score}</div>
-      <p className="text-xl">Modifier: {item.modifier}</p>
+    <section className="p-2 text-center">
+      <header className="text-xl">{item.name}:</header>
+      <div className="text-3xl">{item.score}</div>
+      <p className="text-xl">{item.modifier}</p>
     </section>
   );
 }

@@ -11,11 +11,13 @@ const windowMap = {
       width: '350px',
       height: '350px',
     },
+    children: item => () => <Spell showAdd={false} item={item} />,
     title: item => `Spell: ${item.name}`,
   },
   abilityScores: {
     dimensions: { width: '150px', height: '150px' },
     title: item => `${item.name}`,
+    children: item => () => <AbilityScore item={item} />,
   },
   stickyNotes: {
     dimensions: {
@@ -23,14 +25,13 @@ const windowMap = {
       height: '400px',
     },
     title: item => item.name,
+    children: item => () => <StickyNote item={item} />,
   },
 };
 
-export default function FileOpen() {
+export default function FileOpen({ showContextMenu }) {
   const { player } = React.useContext(PlayerContext);
   const { addWindow } = React.useContext(WindowsContext);
-
-  console.log(player);
 
   return (
     <section className="p-2">
@@ -43,23 +44,16 @@ export default function FileOpen() {
             </h2>
             {items.map(item => (
               <button
+                onContextMenu={showContextMenu('Children!')}
                 onClick={() => {
-                  console.log('heading:', heading, windowMap[heading].dimensions);
                   addWindow({
                     ...windowMap[heading].dimensions,
                     title: windowMap[heading].title(item),
-                    children:
-                      heading === 'spells' ? (
-                        <Spell showAdd={false} item={item} />
-                      ) : heading === 'abilityScores' ? (
-                        <AbilityScore item={item} />
-                      ) : (
-                        <StickyNote item={item} />
-                      ),
+                    children: windowMap[heading].children(item),
                   });
                 }}
                 key={`${heading}-${item.name}`}
-                className="btn"
+                className="btn mr-2 last:mr-0"
               >
                 {item.name}
               </button>

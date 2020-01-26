@@ -77,7 +77,7 @@ export default function Home() {
                 showFileMenu();
                 addWindow({
                   id: guuid(),
-                  children: <FileOpen />,
+                  children: props => <FileOpen {...props} />,
                   title: 'Open',
                   width: '600px',
                 });
