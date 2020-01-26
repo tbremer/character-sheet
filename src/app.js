@@ -5,6 +5,7 @@ import Router, { Route, RouterContext } from './Components/Router';
 import Home from './Components/Home';
 import { auth } from './firebase';
 import { WindowsProvider } from './Context/Windows';
+import { PlayerProvider } from './Context/Player';
 
 const worker = new Worker('./worker.js');
 
@@ -95,7 +96,9 @@ function App() {
 render(
   <Router>
     <WindowsProvider>
-      <App />
+      <PlayerProvider>
+        <App />
+      </PlayerProvider>
     </WindowsProvider>
   </Router>,
   app

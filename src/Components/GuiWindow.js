@@ -47,11 +47,13 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
   }, [windowRef.current]);
 
   function minimizeWindow() {
-    setMinimized(!minimized);
-
     const elem = windowRef.current;
     const bounds = elem.getBoundingClientRect();
-    if (minimized) elem.style.top = bounds.y + 9 + 255 / 2 + 'px';
+    const parsedHeight = parseInt(height, 10);
+
+    setMinimized(!minimized);
+
+    if (minimized) elem.style.top = bounds.y + parsedHeight / 2 + 'px';
     else elem.style.top = bounds.y + 11 + 'px';
   }
 
@@ -91,4 +93,4 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
     </section>
   );
 }
-GuiWindow.defaultProps = { height: 'auto', width: '250px' };
+GuiWindow.defaultProps = { height: '320px', width: '250px' };

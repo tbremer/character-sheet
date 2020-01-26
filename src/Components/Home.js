@@ -1,21 +1,14 @@
 import React from 'react';
 
 import { WindowsContext } from '../Context/Windows';
+import StickyNote from './StickyNote';
 import NewSpell from './NewSpell';
+import AbilityScore from './AbilityScore';
 import GuiWindow from './GuiWindow';
-
-function guuid() {
-  let d = Date.now();
-  return /*const uuid =*/ 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
-  return uuid;
-}
+import FileOpen from './FileOpen';
+import guuid from '../lib/guuid';
 
 export default function Home() {
-  const [playerState, setPlayerState] = React.useState({ spells: null, ac: null, abilityScores: [] });
   const { windows, addWindow, removeWindow } = React.useContext(WindowsContext);
   const [fileMenuOpen, setfileMenuOpen] = React.useState(false);
   function showFileMenu() {
@@ -47,10 +40,32 @@ export default function Home() {
                   className="menu-item"
                   onClick={() => {
                     showFileMenu();
-                    addWindow({ id: guuid(), children: <NewSpell />, title: 'New Spell', height: '320px' });
+                    addWindow({ children: <NewSpell />, title: 'New Spell', height: '320px' });
                   }}
                 >
                   Spell
+                </button>
+
+                <button
+                  type="button"
+                  className="menu-item"
+                  onClick={() => {
+                    showFileMenu();
+                    addWindow({ children: <AbilityScore />, title: 'Ability Score', width: '400px', height: 'auto' });
+                  }}
+                >
+                  Ability Score
+                </button>
+
+                <button
+                  type="button"
+                  className="menu-item"
+                  onClick={() => {
+                    showFileMenu();
+                    addWindow({ children: <StickyNote />, title: 'New Note', width: '400px', height: '400px' });
+                  }}
+                >
+                  Sticky Note
                 </button>
               </div>
             </div>
@@ -62,9 +77,9 @@ export default function Home() {
                 showFileMenu();
                 addWindow({
                   id: guuid(),
-                  children: 'Inside',
+                  children: <FileOpen />,
                   title: 'Open',
-                  minWidth: '600px',
+                  width: '600px',
                 });
               }}
             >

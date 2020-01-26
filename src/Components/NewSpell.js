@@ -1,15 +1,7 @@
 import React from 'react';
 import { WindowsContext } from '../Context/Windows';
-
-function guuid() {
-  let d = Date.now();
-  return /*const uuid =*/ 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
-  return uuid;
-}
+import { PlayerContext } from '../Context/Player';
+import guuid from '../lib/guuid';
 
 export default function NewSpell() {
   const [searchResults, setResults] = React.useState(null);
@@ -24,14 +16,12 @@ export default function NewSpell() {
       .then(r => r.json())
       .then(setResults)
       .then(console.log, console.error);
-
-    console.log(url);
   }
 
   return (
     <>
       <div className="sticky top-0 bg-white z-10">
-        <form class="flex p-2 pr-4" onSubmit={search}>
+        <form className="flex p-2 pr-4" onSubmit={search}>
           <input
             type="text"
             value={searching}
@@ -41,7 +31,7 @@ export default function NewSpell() {
             }}
             className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:border-pink-500"
           />
-          <button class="btn btn-small">Search!</button>
+          <button className="btn btn-small">Search!</button>
         </form>
         <hr className="my-2 mr-4" />
       </div>
@@ -62,24 +52,9 @@ export default function NewSpell() {
                     className="btn btn-small btn-block mb-2 last:mb-0"
                     type="button"
                     onClick={() => {
-                      console.log(i);
                       addWindow({
                         id: guuid(),
-                        children: (
-                          <section className="">
-                            <p className="p-2 text-2xl">{i.name}:</p>
-                            <div className="p-2 bg-gray-400">
-                              {i.dnd_class} | {i.level} | {i.range}
-                            </div>
-                            <p className="p-2">{i.desc}</p>
-                            {i.higher_level && (
-                              <>
-                                <p className="p-2 pb-0 text-lg text-gray-600">At higher levels:</p>
-                                <p className="p-2">{i.higher_level}</p>
-                              </>
-                            )}
-                          </section>
-                        ),
+                        children: <Spell item={i} />,
                         title: `Spell: ${i.name}`,
                         width: '350px',
                         height: '350px',
@@ -98,3 +73,30 @@ export default function NewSpell() {
     </>
   );
 }
+
+export function Spell({ item, showAdd }) {
+  const { addSpell } = React.useContext(PlayerContext);
+  return (
+    <section className="">
+      <header className="p-2 text-2xl">{item.name}:</header>
+      <div className="p-2 bg-gray-400">
+        {item.dnd_class} | {item.level} | {item.range}
+      </div>
+      <p className="p-2">{item.desc}</p>
+      {item.higher_level && (
+        <>
+          <p className="p-2 pb-0 text-lg text-gray-600">At higher levels:</p>
+          <p className="p-2">{item.higher_level}</p>
+        </>
+      )}
+      {showAdd && (
+        <footer className="p-2">
+          <button type="button" onClick={() => addSpell(item)} className="btn btn-small btn-block">
+            Add to Spell List
+          </button>
+        </footer>
+      )}
+    </section>
+  );
+}
+Spell.defaultProps = { showAdd: true };

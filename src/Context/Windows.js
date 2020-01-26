@@ -1,4 +1,5 @@
 import React from 'react';
+import guuid from '../lib/guuid';
 
 export const WindowsContext = React.createContext();
 
@@ -16,7 +17,7 @@ export function WindowsProvider({ children }) {
       );
     },
     addWindow(windowObj) {
-      setWindows([...windows, windowObj]);
+      setWindows([...windows, { ...windowObj, id: guuid() }]);
     },
   };
   return <WindowsContext.Provider value={api}>{children}</WindowsContext.Provider>;
