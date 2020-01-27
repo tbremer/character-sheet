@@ -77,7 +77,7 @@ export default function Home() {
                 showFileMenu();
                 addWindow({
                   id: guuid(),
-                  children: props => <FileOpen {...props} />,
+                  children: <FileOpen />,
                   title: 'Open',
                   width: '600px',
                 });
@@ -101,6 +101,21 @@ export default function Home() {
       {windows.map(({ id, ...rest }) => (
         <GuiWindow key={id} closeDialog={() => removeWindow(id)} {...rest} />
       ))}
+      <div
+        onDrop={() => {
+          console.log('dropped');
+        }}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '32px',
+          height: '32px',
+          border: '1px solid #f06',
+        }}
+      >
+        Trash
+      </div>
     </>
   );
 }

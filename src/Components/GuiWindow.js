@@ -26,7 +26,6 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
   const windowRef = React.useRef(null);
   const headerRef = React.useRef(null);
   const [minimized, setMinimized] = React.useState(false);
-  const [contextMenu, setContextMenu] = React.useState(null);
 
   React.useEffect(() => {
     const { current: windowElem } = windowRef;
@@ -78,27 +77,8 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
     else elem.style.top = bounds.y + 11 + 'px';
   }
 
-  function showContextMenu(children) {
-    return false;
-    return evt => {
-      evt.preventDefault();
-      setContextMenu(
-        <Context
-          closeSelf={evt => {
-            evt.stopPropagation();
-            evt.preventDefault();
-            setContextMenu(null);
-          }}
-          children={children}
-          position={{ x: evt.clientX, y: evt.clientY }}
-        />
-      );
-    };
-  }
-
   return (
     <>
-      {contextMenu}
       <section
         ref={windowRef}
         className="window draggable flex flex-col"
@@ -128,7 +108,7 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
 
         {!minimized && (
           <section className="flex-1 overflow-y-auto" style={{ backgroundColor: '#fff' }}>
-            {React.createElement(children, { windowRef: windowRef, showContextMenu })}
+            {children}
           </section>
         )}
       </section>
