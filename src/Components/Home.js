@@ -6,6 +6,7 @@ import NewSpell from './NewSpell';
 import AbilityScore from './AbilityScore';
 import GuiWindow from './GuiWindow';
 import FileOpen from './FileOpen';
+import { TrashLauncher } from './WasteBin';
 import guuid from '../lib/guuid';
 
 export default function Home() {
@@ -101,21 +102,7 @@ export default function Home() {
       {windows.map(({ id, ...rest }) => (
         <GuiWindow key={id} closeDialog={() => removeWindow(id)} {...rest} />
       ))}
-      <div
-        onDrop={() => {
-          console.log('dropped');
-        }}
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          width: '32px',
-          height: '32px',
-          border: '1px solid #f06',
-        }}
-      >
-        Trash
-      </div>
+      <TrashLauncher />
     </>
   );
 }

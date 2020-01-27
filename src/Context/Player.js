@@ -5,7 +5,7 @@ export const PlayerContext = createContext({});
 export function PlayerProvider({ children }) {
   const player = window.localStorage.getItem('player');
   const [playerState, setPlayerState] = React.useState(
-    player ? JSON.parse(player) : { spells: [], ac: [], abilityScores: [] }
+    player ? JSON.parse(player) : { stickyNotes: [], spells: [], ac: [], abilityScores: [], trash: [] }
   );
 
   function updatePlayerState(newState) {
@@ -45,6 +45,21 @@ export function PlayerProvider({ children }) {
       updatePlayerState({
         stickyNotes: [...playerState.stickyNotes],
       });
+    },
+
+    moveToTrash(group, name) {
+      const idx = playerState[group].findIndex(i => i.name === name);
+      const tmpItem = playerState[group][idx];
+      playerState[group].splice(idx, 1);
+
+      updatePlayerState({
+        ...playerState,
+        trash: [...(playerState.trash || []), tmpItem],
+      });
+    },
+
+    emptyTrash() {
+      updatePlayerState({ trash: [] });
     },
 
     saveState() {},

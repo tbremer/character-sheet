@@ -2,26 +2,6 @@ import React from 'react';
 
 let curZ = 0;
 
-function Context({ position, closeSelf, children }) {
-  React.useEffect(() => {
-    document.addEventListener('mousedown', closeSelf);
-
-    return () => document.removeEventListener('mousedown', closeSelf);
-  });
-  return (
-    <section
-      className="menu window"
-      style={{
-        top: position.y + 'px',
-        left: position.x + 'px',
-        width: '250px',
-      }}
-    >
-      {children}
-    </section>
-  );
-}
-
 export default function GuiWindow({ closeDialog, children, title, width, height }) {
   const windowRef = React.useRef(null);
   const headerRef = React.useRef(null);
@@ -76,6 +56,8 @@ export default function GuiWindow({ closeDialog, children, title, width, height 
     if (minimized) elem.style.top = bounds.y + parsedHeight / 2 + 'px';
     else elem.style.top = bounds.y + 11 + 'px';
   }
+
+  console.log('curZ:', curZ);
 
   return (
     <>
